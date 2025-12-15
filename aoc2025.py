@@ -1,6 +1,5 @@
 from aoc2025_helper import EdgeCase, Positions, UniqueCoordsQueue
 
-
 class Day1:
     @staticmethod
     def Part1() -> int:
