@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
+
+# AOC input files
+day*_input.txt
