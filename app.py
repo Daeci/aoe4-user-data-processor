@@ -1,21 +1,27 @@
-import wx
-from panels import HomePage, AoC2025Page
+from panels import HomePage, AoC2025Page, BDOPage, FFXIVPage
+from utils import Themes
 
-#globals
-X_BORDER_PX = 5
-Y_BORDER_PX = 5
+import wx
+import wx.lib.agw.aui as aui
 
 class MainFrame(wx.Frame):
     def __init__(self):
         super().__init__(parent=None, title='Playground', size=wx.Size(1280, 720))
+        theme = Themes.dark
+        if theme == Themes.dark:
+            self._enable_system_dark_mode()
         self.Center()
-        navbar = wx.Notebook(self)
+        self.SetBackgroundColour(theme.background)
+        navbar = aui.AuiNotebook(self, agwStyle=aui.AUI_NB_TOP)
+        navbar.GetAuiManager().GetArtProvider().SetDefaultColours(base_colour=theme.tab)
+        navbar.SetBackgroundColour(theme.background)
+        navbar.SetForegroundColour(theme.foreground)
 
-        # pages to add to navbar
-        home_panel = HomePage(navbar)
-        aoc2025_panel = AoC2025Page(navbar)
-        bdo_panel = wx.Panel(navbar)
-        ffxiv_panel = wx.Panel(navbar)
+        # add all the pages to navbar
+        home_panel = HomePage(navbar, theme)
+        aoc2025_panel = AoC2025Page(navbar, theme)
+        bdo_panel = BDOPage(navbar, theme)
+        ffxiv_panel = FFXIVPage(navbar, theme)
 
         # add all added pages to notebook with labels
         navbar.AddPage(home_panel, "Home")
@@ -28,6 +34,24 @@ class MainFrame(wx.Frame):
         self.SetSizer(sizer)
         
         self.Show()
+    
+    def _enable_system_dark_mode(self):
+        """Enable dark mode for window title bar on Windows 10/11"""
+        if wx.Platform == '__WXMSW__':
+            try:
+                import ctypes
+                hwnd = self.GetHandle()
+                DWMWA_USE_IMMERSIVE_DARK_MODE = 20 # (Windows 10 build 19041+)
+                value = ctypes.c_int(1)  # 1 = dark mode, 0 = light mode
+                ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                    hwnd, 
+                    DWMWA_USE_IMMERSIVE_DARK_MODE,
+                    ctypes.byref(value),
+                    ctypes.sizeof(value)
+                )
+            except Exception:
+                # maybe add an alert prompt to inform user to change dark mode val
+                pass
 
 if __name__ == '__main__':
     app = wx.App()

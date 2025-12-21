@@ -1,7 +1,7 @@
 from utils import ThemeColors
 import wx
 
-class HomePage(wx.Panel):
+class BDOPage(wx.Panel):
     def __init__(self, parent, theme: ThemeColors):
         super().__init__(parent)
         self.SetBackgroundColour(theme.panel_background)

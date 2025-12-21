@@ -1,10 +1,13 @@
-import wx
 from .aoc2025 import Day1, Day2, Day3, Day4
+from utils import ThemeColors
+import wx
 
 class AoC2025Page(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, theme: ThemeColors):
         super().__init__(parent)
-
+        self.SetBackgroundColour(theme.panel_background)
+        self.SetForegroundColour(theme.foreground)
+        
         day1part1_btn = wx.Button(self, label='Day 1 Part 1')
         day1part1_btn.Bind(wx.EVT_BUTTON, self.on_day1part2_clicked)
         day1part2_btn = wx.Button(self, label='Day 1 Part 2')
